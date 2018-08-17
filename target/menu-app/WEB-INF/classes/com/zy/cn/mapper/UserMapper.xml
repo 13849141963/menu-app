@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.cn.dao.UserDAO" >
+  <resultMap id="BaseResultMap" type="com.zy.cn.entity.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="networkName" property="networkname" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="idCode" property="idcode" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="INTEGER" />
+    <result column="country" property="country" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="INTEGER" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="educationBackground" property="educationbackground" jdbcType="INTEGER" />
+    <result column="sign" property="sign" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, networkName, salt, password, age, birthday, idCode, mobile, nation, country, 
+    email, hobby, state, address, company, educationBackground, sign, createTime
+  </sql>
+
+
+  <!--使用ehcache缓存-->
+  <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
+  <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+  <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zy.cn.entity.User" >
+    insert into t_user (id, name, networkName, 
+      salt, password, age, 
+      birthday, idCode, mobile, 
+      nation, country, email, 
+      hobby, state, address, 
+      company, educationBackground, sign, 
+      createTime)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{networkname,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{idcode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{nation,jdbcType=INTEGER}, #{country,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, 
+      #{hobby,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{address,jdbcType=INTEGER},
+      #{company,jdbcType=VARCHAR}, #{educationbackground,jdbcType=INTEGER}, #{sign,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zy.cn.entity.User" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="networkname != null" >
+        networkName,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="idcode != null" >
+        idCode,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="nation != null" >
+        nation,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="hobby != null" >
+        hobby,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="educationbackground != null" >
+        educationBackground,
+      </if>
+      <if test="sign != null" >
+        sign,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="networkname != null" >
+        #{networkname,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idcode != null" >
+        #{idcode,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null" >
+        #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=INTEGER},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="educationbackground != null" >
+        #{educationbackground,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null" >
+        #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zy.cn.entity.User" >
+    update t_user
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="networkname != null" >
+        networkName = #{networkname,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idcode != null" >
+        idCode = #{idcode,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null" >
+        nation = #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        hobby = #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=INTEGER},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="educationbackground != null" >
+        educationBackground = #{educationbackground,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null" >
+        sign = #{sign,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zy.cn.entity.User" >
+    update t_user
+    set name = #{name,jdbcType=VARCHAR},
+      networkName = #{networkname,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      idCode = #{idcode,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=INTEGER},
+      country = #{country,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      hobby = #{hobby,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      address = #{address,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
+      educationBackground = #{educationbackground,jdbcType=INTEGER},
+      sign = #{sign,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="query" resultType="com.zy.cn.entity.User" parameterType="com.zy.cn.entity.User">
+   SELECT
+      <include refid="Base_Column_List" />
+    FROM
+    T_USER
+    <where>
+      <if test="id != null" >
+         id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="name != null" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="networkname != null" >
+        and networkName = #{networkname,jdbcType=VARCHAR}
+      </if>
+      <if test="salt != null" >
+        and salt = #{salt,jdbcType=VARCHAR}
+      </if>
+      <if test="password != null" >
+        and password = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null" >
+        and birthday = #{birthday,jdbcType=TIMESTAMP}
+      </if>
+      <if test="idcode != null" >
+        and idCode = #{idcode,jdbcType=VARCHAR}
+      </if>
+      <if test="mobile != null" >
+        and mobile = #{mobile,jdbcType=VARCHAR}
+      </if>
+      <if test="nation != null" >
+        and nation = #{nation,jdbcType=INTEGER}
+      </if>
+      <if test="country != null" >
+        and country = #{country,jdbcType=INTEGER}
+      </if>
+      <if test="email != null" >
+        and email = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="hobby != null" >
+        and hobby = #{hobby,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="address != null" >
+        and address = #{address,jdbcType=INTEGER}
+      </if>
+      <if test="company != null" >
+        and  company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="educationbackground != null" >
+        and educationBackground = #{educationbackground,jdbcType=INTEGER}
+      </if>
+      <if test="sign != null" >
+        and  sign = #{sign,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+
+
+
+
+
+  <!--查询用户对应的角色-->
+  <select id="queryUserRoles" parameterType="java.lang.Long" resultType="com.zy.cn.entity.vo.UserRoleVo">
+    SELECT
+        tu.id userId,
+        tu.NAME userName,
+        tr.id roleId,
+        tr.`name` roleName
+    FROM
+        t_user tu
+        JOIN user_role ur ON tu.id = ur.user_id
+        RIGHT JOIN t_role tr ON tr.id = ur.role_id
+    WHERE
+        tu.id = #{id}
+  </select>
+
+
+
+
+  <!--查询用户对应的权限-->
+  <select id="queryUserPowers" parameterType="java.lang.Long" resultType="com.zy.cn.entity.vo.UserPowerVo">
+   SELECT
+      tu.id userId,
+      tu.NAME userName,
+      tr.id roleId,
+      tr.`name` roleName,
+      tp.id powerId,
+      tp.NAME powerName
+  FROM
+      t_user tu
+      JOIN user_role ur ON tu.id = ur.user_id
+      RIGHT JOIN t_role tr ON tr.id = ur.role_id
+      JOIN role_power rp ON tr.id = rp.role_id
+      RIGHT JOIN t_power tp ON tp.id = rp.power_id
+   WHERE
+        tu.id = #{id}
+  </select>
+
+
+
+
+
+
+</mapper>

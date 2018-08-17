@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.cn.dao.AdminDAO">
+
+    <sql id="BaseSql">
+        SELECT
+            ID,
+            NAME,
+            PASSWORD,
+            SALT,
+            EMAIL,
+            MOBILE
+    </sql>
+
+    <!--使用ehcache缓存-->
+    <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <insert id="insert" parameterType="com.zy.cn.entity.AdminEntity" >
+       INSERT INTO admin (id, name, password, salt, email
+            , mobile)
+        VALUES (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}
+            , #{mobile,jdbcType=VARCHAR})
+    </insert>
+
+
+    <update id="update" parameterType="com.zy.cn.entity.AdminEntity" >
+        update admin
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null" >
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    
+    <select id="queryA" resultType="com.zy.cn.entity.AdminEntity" parameterType="com.zy.cn.entity.AdminEntity">
+      <include refid="BaseSql"/>
+        FROM
+        ADMIN A
+        <where>
+            1=1
+            <if test="name!=null and name!=''">
+                A.name=#{name}
+            </if>
+            <if test="password!=null and password!=''">
+                and A.PASSWORD = #{password}
+            </if>
+            <if test="email!=null and email!=''">
+                and A.EMAIL = #{email}
+            </if>
+            <if test="mobile!=null and mobile!='' ">
+                and A.MOBILE = #{mobile}
+            </if>
+        </where>
+    </select>
+
+
+
+    
+
+
+
+
+
+
+
+
+</mapper>

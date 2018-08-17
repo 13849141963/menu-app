@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+
+
+
+
+
+    <!--https://github.com/xujeff/tianti 张敏-->
+    <!--https://www.sojson.com/shiro   shiro完整版-->
+
+
+
+
+
+    <!-- 配置我们的shiroFilter对象 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 引入安全管理器 -->
+        <property name="securityManager" ref="securityManager"></property>
+        <!-- 配置LoginUrl -->
+        <property name="loginUrl" value="/login.html"></property>
+        <!-- 配置拦截器规则 -->
+        <property name="filterChainDefinitions">
+            <value>
+                /static/** = anon
+                /js/** = anon
+                /user/logout = logout
+                /authCode = anon
+                /user/login = anon
+                /send/messge/sms = anon
+                /user/logout=logout
+                /** = authc
+            </value>
+        </property>
+
+    </bean>
+
+    <!-- 创建核心的安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- 引入自定义Realm -->
+        <property name="realm" ref="customRealm"></property>
+        <!--引入记住我管理器-->
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+        <!--使用ehcache缓存-->
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+
+   <!-- <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcacheManager"/>
+        <property name="transactionAware" value="true"/>
+    </bean>-->
+
+
+    <!-- 缓存管理器 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
+    </bean>
+
+
+    <!-- 声明自定义Realm对象 -->
+    <bean id="customRealm" class="com.zy.cn.realm.CustomRealm">
+        <!--引入凭证匹配器-->
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+
+
+
+    <!--创建记住我管理器-->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!--引入Cookie-->
+        <property name="cookie" ref="cookie"/>
+        <!--cipherKey是加密rememberMe Cookie的密钥；默认AES算法；-->
+        <property name="cipherKey"  value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+    </bean>
+
+
+
+
+    <!--创建cookie对象-->
+    <bean id="cookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!--配置cookie的名字-->
+        <property name="name" value="testRememberMe"/>
+        <!--配置cookie的存活时间打个比方就是你登陆过后关闭浏览器在存活时间内还可以登录-->
+        <!---1就是cookie在用户关闭浏览器的时候关闭-->
+        <property name="maxAge" value="-1"/>
+    </bean>
+
+
+
+
+    <!--声明凭证匹配器-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!--声明加密方式-->
+        <property name="hashAlgorithmName" value="md5"/>
+        <!--声明是是否加盐-->
+        <property name="hashSalted" value="true"/>
+        <!--声明散列或者加密的次数-->
+        <property name="hashIterations" value="1024"/>
+    </bean>
+
+    <!--开启aop切面设置代理方式为cglib-->
+   <!-- <aop:config proxy-target-class="true">
+
+    </aop:config>-->
+
+    <!--声明切面类(注：这个类是shiro提供的我们使用直接声明即可)-->
+    <bean id="advice" class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <!--注入安全管理器-->
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+
+
+
+
+    <!--自定义shiro权限校验filter-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 此bean要被web.xml引用,和web.shiroFilter -->
+    <!--<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        &lt;!&ndash; 权限管理器 &ndash;&gt;
+        <property name="securityManager" ref="securityManager"/>
+        &lt;!&ndash; 登录地址 &ndash;&gt;
+        <property name="loginUrl" value="/login.js"/>
+        &lt;!&ndash; 登录后跳转到业务页面 &ndash;&gt;
+        <property name="successUrl" value="/page/main.html"/>
+        &lt;!&ndash; 错误页面 &ndash;&gt;
+        <property name="unauthorizedUrl" value="/nopage.html"/>
+        &lt;!&ndash; 配置系统中受限资源列表   系统中那些资源是受限的
+			 anon  ======== 匿名访问不需要认证
+			 authc ======== 必须认证访问
+			 logout ======= 注销fileter
+		 &ndash;&gt;
+        &lt;!&ndash; 权限配置 &ndash;&gt;
+        <property name="filterChainDefinitions">
+            <value>
+                &lt;!&ndash; 匿名登录请求 &ndash;&gt;
+                //menu-app/authCode = anon
+                /static/** = anon
+                &lt;!&ndash; 需要权限为edit的用户才能访问此请求&ndash;&gt;
+                &lt;!&ndash;/user/edit=perms[user:edit]&ndash;&gt;
+                &lt;!&ndash; 需要管理员角色才能访问此页面 &ndash;&gt;
+                &lt;!&ndash;/user/edit=roles[admin]&ndash;&gt;
+                &lt;!&ndash;用户注销&ndash;&gt;
+                /user/logout = logout
+                &lt;!&ndash;拦截非静态资源的所有请求&ndash;&gt;
+                /** = authc
+                &lt;!&ndash;authc:确保已认证的用户发送的请求才能通过（若未认证，则跳转到登录页面）&ndash;&gt;
+            </value>
+        </property>
+        &lt;!&ndash; 修改系统默认使用的Fitler为自定义Fitler &ndash;&gt;
+        &lt;!&ndash;<property name="filters">
+            <map>
+                <entry key="roles" value-ref="customRolesAuthorizationFilter"/>
+            </map>
+        </property>&ndash;&gt;
+
+        &lt;!&ndash; 没有权限的跳转页面路径 &ndash;&gt;
+       &lt;!&ndash; <property name="unauthorizedUrl" value="/unauthoriz.jsp"/>&ndash;&gt;
+    </bean>
+
+
+
+    &lt;!&ndash; 配置安全管理器(核心) &ndash;&gt;
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        &lt;!&ndash; 我们自定义的realm &ndash;&gt;
+        <property name="realm" ref="authRealm"/>
+        &lt;!&ndash; 缓存管理器 &ndash;&gt;
+        &lt;!&ndash;<property name="cacheManager" refz="cacheManager"/>&ndash;&gt;
+    </bean>
+
+
+    &lt;!&ndash; 创建自定义realm &ndash;&gt;
+    <bean id="authRealm" class="com.zy.cn.realm.AuthRealm">
+        &lt;!&ndash; 注入 凭证匹配器 &ndash;&gt;
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        &lt;!&ndash; 开启认证和授权的数据加入缓存中 &ndash;&gt;
+        <property name="authenticationCachingEnabled" value="true"/>
+        <property name="authenticationCacheName" value="authenticationCache"/>
+        <property name="authorizationCachingEnabled" value="true"/>
+        <property name="authorizationCacheName" value="authorizationCache"/>
+    </bean>
+
+
+    &lt;!&ndash; 凭证匹配器 &ndash;&gt;
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1024"/>
+    </bean>-->
+
+<!--
+    &lt;!&ndash; 创建ehcacheManager &ndash;&gt;
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache-shiro.xml"/>
+    </bean>-->
+
+
+
+
+
+    <!--启用Shiro相关的注解-->
+   <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>-->
+
+
+</beans>
