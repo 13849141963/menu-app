@@ -7,6 +7,7 @@ import com.zy.cn.entity.User;
 import com.zy.cn.service.UserService;
 import com.zy.cn.util.Base64Util;
 import com.zy.cn.util.Constant;
+import com.zy.cn.util.ShiroUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -14,6 +15,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +122,21 @@ public class UserController {
         admin.setPassword(password);
         return admin;
     }
+
+    /**
+     * 获取登录的用户信息
+     */
+    @RequestMapping("/info")
+    @ResponseBody
+    public User info(){
+        Session session = ShiroUtils.getSession();
+        return (User)session.getAttribute("user");
+    }
+    /*User getUser(){
+        return ShiroUtils.getUserEntity();
+    }*/
+
+
 
 
 

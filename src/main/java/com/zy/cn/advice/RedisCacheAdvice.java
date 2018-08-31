@@ -76,7 +76,7 @@ public class RedisCacheAdvice implements MethodInterceptor {
     private String generateKey(MethodInvocation invocation) {
         StringBuilder builder = new StringBuilder();
         //获取方法的名字
-        String methodName = invocation.getMethod().getName();
+        String methodName = invocation.getMethod().toString();
         //追加到StringBuilder中
         builder.append(methodName);
         //获取方法的参数

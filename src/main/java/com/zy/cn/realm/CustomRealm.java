@@ -4,6 +4,7 @@ import com.zy.cn.entity.vo.UserPowerVo;
 import com.zy.cn.entity.vo.UserRoleVo;
 import com.zy.cn.service.UserService;
 import com.zy.cn.util.Constant;
+import com.zy.cn.util.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -12,8 +13,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class CustomRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
+
+
 
     User user = null;
 
@@ -41,7 +46,7 @@ public class CustomRealm extends AuthorizingRealm {
         Object credentials = token.getCredentials();
 
         user = new User();
-        //user.setPassword(String.valueOf(credentials));
+        //user.setPassword(DigestUtils.md5DigestAsHex(String.valueOf(credentials).getBytes()));
         user.setName(String.valueOf(principal));
 
         //查询用户数据
@@ -61,7 +66,10 @@ public class CustomRealm extends AuthorizingRealm {
             //把用户的信息放入session中
             //ShiroUtils.setSessionAttribute("user",query.get(0));
             //把用户的信息放入cookie中
-            Cookie user1 = new Cookie("user", query.get(0).getId() + "@" + query.get(0).getName());
+            /*Cookie user1 = new Cookie("user", query.get(0).getId() + "@" + query.get(0).getName());
+            response.addCookie(user1);*/
+
+            ShiroUtils.setSessionAttribute("user", query.get(0));
             return simpleAuthenticationInfo;
 
         }

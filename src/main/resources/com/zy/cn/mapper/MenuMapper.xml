@@ -1,130 +1,133 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zy.cn.dao.MenuDAO" >
-  <resultMap id="BaseResultMap" type="com.zy.cn.entity.MenuEntity" >
+  <resultMap id="BaseResultMap" type="com.zy.cn.entity.Menu" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="menu" property="menu" jdbcType="VARCHAR" />
-    <result column="href" property="href" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="state" property="state" jdbcType="INTEGER" />
-    <result column="childId" property="childid" jdbcType="INTEGER" />
-    <result column="logo" property="logo" jdbcType="INTEGER" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, menu, href, state, childId, logo
+    id, name, icon, url, state, parentId
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from menu
+    from t_menu
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from menu
+    delete from t_menu
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zy.cn.entity.MenuEntity" >
-    insert into menu (id, menu, href, 
-      state, childId, logo
+  <insert id="insert" parameterType="com.zy.cn.entity.Menu" >
+    insert into t_menu (id, name, icon, 
+      url, state, parentId
       )
-    values (#{id,jdbcType=INTEGER}, #{menu,jdbcType=VARCHAR}, #{href,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{childid,jdbcType=INTEGER}, #{logo,jdbcType=INTEGER}
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zy.cn.entity.MenuEntity" >
-    insert into menu
+  <insert id="insertSelective" parameterType="com.zy.cn.entity.Menu" >
+    insert into t_menu
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="menu != null" >
-        menu,
+      <if test="name != null" >
+        name,
       </if>
-      <if test="href != null" >
-        href,
+      <if test="icon != null" >
+        icon,
+      </if>
+      <if test="url != null" >
+        url,
       </if>
       <if test="state != null" >
         state,
       </if>
-      <if test="childid != null" >
-        childId,
-      </if>
-      <if test="logo != null" >
-        logo,
+      <if test="parentid != null" >
+        parentId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="menu != null" >
-        #{menu,jdbcType=VARCHAR},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="href != null" >
-        #{href,jdbcType=VARCHAR},
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         #{state,jdbcType=INTEGER},
       </if>
-      <if test="childid != null" >
-        #{childid,jdbcType=INTEGER},
-      </if>
-      <if test="logo != null" >
-        #{logo,jdbcType=INTEGER},
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zy.cn.entity.MenuEntity" >
-    update menu
+  <update id="updateByPrimaryKeySelective" parameterType="com.zy.cn.entity.Menu" >
+    update t_menu
     <set >
-      <if test="menu != null" >
-        menu = #{menu,jdbcType=VARCHAR},
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="href != null" >
-        href = #{href,jdbcType=VARCHAR},
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         state = #{state,jdbcType=INTEGER},
       </if>
-      <if test="childid != null" >
-        childId = #{childid,jdbcType=INTEGER},
-      </if>
-      <if test="logo != null" >
-        logo = #{logo,jdbcType=INTEGER},
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zy.cn.entity.MenuEntity" >
-    update menu
-    set menu = #{menu,jdbcType=VARCHAR},
-      href = #{href,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.zy.cn.entity.Menu" >
+    update t_menu
+    set name = #{name,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
       state = #{state,jdbcType=INTEGER},
-      childId = #{childid,jdbcType=INTEGER},
-      logo = #{logo,jdbcType=INTEGER}
+      parentId = #{parentid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <resultMap type="com.zy.cn.entity.MenuEntity" id="menuResultMap">
-    <id column="id" property="id"/>
-    <result column="menu" property="menu"/>
-    <result column="href" property="href"/>
-    <result column="state" property="state"/>
-    <collection property="menus" javaType="list" ofType="com.zy.cn.entity.MenuEntity">
-      <id column="NUID" property="id"/>
-      <result column="NUMENU" property="menu"/>
-      <result column="NUHREF" property="href"/>
-      <result column="NUSTATE" property="state"/>
-    </collection>
-  </resultMap>
-  <select id="queryAll" resultMap="menuResultMap" >
-    SELECT
-    ME.ID,ME.MENU,ME.HREF,ME.STATE,
-    NU.ID NUID,NU.MENU NUMENU,NU.HREF NUHREF,NU.STATE NUSTATE
-    FROM
-    menu me
-    LEFT JOIN menu nu ON me.id = nu.childId
-    WHERE
-    me.childId IS NULL
 
+
+    <resultMap id="menuResultMap" type="com.zy.cn.entity.Menu">
+      <id property="id" column="id"/>
+      <result property="name" column="name"/>
+      <collection property="lists" javaType="list" ofType="com.zy.cn.entity.Menu">
+        <id property="id" column="tm_2_id"></id>
+        <result property="name" column="tm_2_name"/>
+        <result property="url" column="tm_2_url"/>
+        <result property="icon" column="tm_2_icon"/>
+      </collection>
+    </resultMap>                 <!-- https://blog.csdn.net/goodsave/article/details/78879842-->
+
+  <select id="queryAll" resultMap="menuResultMap">
+    SELECT tm_1.id,tm_1.name,tm_1.icon,tm_1.url,tm_1.state,tm_2.id tm_2_id,tm_2.name tm_2_name,
+          tm_2.icon tm_2_icon,tm_2.parentId tm_2_parentId,tm_2.url tm_2_url,tm_2.state tm_2_state
+    FROM
+      t_menu tm_1
+    JOIN
+      t_menu tm_2
+    ON tm_1.id = tm_2.parentId
+    WHERE tm_1.parentId IS NULL
   </select>
+
+
+
 </mapper>

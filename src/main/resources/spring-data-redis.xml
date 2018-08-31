@@ -3,20 +3,21 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+
     <!--spring-data-redis操作单机版redis-->
-    <!--<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-        <property name="hostName" value="192.168.87.129"/>
-        <property name="port" value="6279"/>
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="127.0.0.1"/>
+        <property name="port" value="6379"/>
         <property name="database" value="0"/>
         <property name="usePool" value="true"/>
     </bean>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
-    </bean>-->
+    </bean>
 
     <!--spring-data-redis操作集群-->
-    <bean id="redisClusterConfiguration" class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+    <!--<bean id="redisClusterConfiguration" class="org.springframework.data.redis.connection.RedisClusterConfiguration">
         <property name="clusterNodes">
             <set>
                 <bean class="org.springframework.data.redis.connection.RedisClusterNode">
@@ -52,15 +53,15 @@
     </bean>
 
 
-    <!--创建连接工厂-->
+    &lt;!&ndash;创建连接工厂&ndash;&gt;
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <constructor-arg index="0" name="clusterConfig" ref="redisClusterConfiguration"/>
     </bean>
 
-    <!--创建spring-date-redis操作redis的对象-->
+    &lt;!&ndash;创建spring-date-redis操作redis的对象&ndash;&gt;
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
-    </bean>
+    </bean>-->
 
     <!--配置切面-->
     <!--<aop:config proxy-target-class="true">

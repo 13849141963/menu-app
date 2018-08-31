@@ -62,5 +62,15 @@ public class UserDAOTest extends ApplicationContext {
 
     }
 
+    //
+    @Test
+    public void tests(){
+        User user = new User();
+        user.setName("admin");
+        user.setPassword("72ef1e7d3a341d4fbff3ea0b9b6486f4");
+        List<User> query = userDAO.query(user);
+        System.out.println("====");
+    }
+
 
 }

@@ -4,14 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>layout 后台大布局 - Layui</title>
-    <link rel="stylesheet" href="/menu-app/static/layui/css/layui.css">
-    <script src="/menu-app/static/layui/layui.js"></script>
-    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/layui/layui.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="../static/js/jquery.cookie.js"></script>
+
+
+
 </head>
-<body onload="loadMenus()" class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+<body  class="layui-layout-body" >
+<div class="layui-layout layui-layout-admin" id="app">
     <div class="layui-header">
-        <div class="layui-logo">layui 后台布局</div>
+        <div class="layui-logo">房地产项目</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="">控制台</a></li>
@@ -30,7 +35,7 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    贤心
+                    {{user.name}}
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -41,29 +46,37 @@
         </ul>
     </div>
 
-    <div class="layui-side layui-bg-black">
+    <div class="layui-side layui-bg-black" >
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">所有商品</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test" v-for="menu in menus">
+
+
+
+                <!--左侧导航栏菜单开始-->
+
+               <!-- <li class="layui-nav-item layui-nav-itemed">
+                    <div v-for="menu in menus">
+                        <a class="" href="javascript:;">{{menu.name}}<span class="layui-nav-more"></span></a>
+                        <dl v-for="ms in menu.lists" class="layui-nav-child">
+                            <dd><a href="javascript:;">{{ms.name}}</a></dd>
+                        </dl>
+                    </div>
+                </li>-->
+
+
+                <li class="layui-nav-item layui-nav-itemed" >
+                    <a class="" href="javascript:;">{{menu.name}}</a>
+                    <dl v-for="ms in menu.lists" class="layui-nav-child">
+                        <dd><a :href="ms.href">{{ms.name}}</a></dd>
+
                     </dl>
                 </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">解决方案</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="">云市场</a></li>
-                <li class="layui-nav-item"><a href="">发布商品</a></li>
+
+                <!--左侧导航栏菜单结束-->
+
+
+
             </ul>
         </div>
     </div>
@@ -80,6 +93,79 @@
 </div>
 <script>
 
+    layui.use('element', function(){
+        //var element = layui.element;
+
+    });
+
+
+
+
+
+     // 实例化vue对象（MVVM中的View Model）
+    var vm =  new Vue({
+             // vm控制的区块为id为app的div，此div中的所有vue指令均可以被vm解析
+                 el:'#app',
+                 data:{
+                     // 数据 （MVVM中的Model）
+                     name:"",
+                     menus:{},
+                     user:'',
+                 },
+                 methods:{
+                     //获取所有菜单
+                     getMenuList:function() {
+                         $.getJSON("/menu-app/menu/queryAll", function(result){
+                             //console.log('菜单:'+result[0].name);
+                             vm.menus = result;
+                         });
+                         }
+                     },
+                    //获取用户名
+                    getUser:function(){
+                        $.getJSON("/menu-app/user/info", function(result){
+                            vm.user = result;
+                        });
+
+                    },
+                 created: function(){
+                     this.getMenuList();
+                     $.ajax({
+                         type: "POST",
+                         url: "/menu-app/user/info",
+                         success: function(result){
+                             vm.user = result;
+                             console.log(result);
+                         }
+                     });
+                 },
+
+             })
+
+    //加载页面之前执行的函数
+    /*
+      window.onload=function(){
+            $.ajax({
+                type: "POST",
+                url: "/menu-app/user/info",
+                success: function(result){
+                    vm.user = result;
+                    console.log(result);
+                }
+            });
+        }*/
+
+
+    /*function loadMenus(){
+        $.ajax({
+            type: "POST",
+            url: "/menu-app/menu/queryAll",
+            success: function(result){
+                vm.menus = result;
+                console.log(result);
+            }
+        });
+    }*/
 </script>
 </body>
 </html>

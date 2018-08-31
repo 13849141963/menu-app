@@ -80,6 +80,8 @@
         var password = admin.password;
         var verify =admin.verify;
 
+        alert();
+
         if( name.trim() == "" || password.trim() == "" || verify.trim() == ""){
             var obj = document.getElementById("errorMsg");
             $("#tipMsg").html("请填写完整的登录信息！");

@@ -1,10 +1,8 @@
 package com.zy.cn.service;
-
-import com.zy.cn.entity.MenuEntity;
-
+import com.zy.cn.entity.Menu;
 import java.util.List;
 
 public interface MenuService {
 
-    public List<MenuEntity> queryAll();
+    public List<Menu> queryAll();
 }

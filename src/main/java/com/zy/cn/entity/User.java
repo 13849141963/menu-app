@@ -5,7 +5,7 @@ import java.util.Date;
 /****
  * 用户实体
  */
-public class User {
+public class User implements java.io.Serializable{
     private Long id;
 
     private String name;
@@ -194,5 +194,30 @@ public class User {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", networkname='" + networkname + '\'' +
+                ", salt='" + salt + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", birthday=" + birthday +
+                ", idcode='" + idcode + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", nation=" + nation +
+                ", country=" + country +
+                ", email='" + email + '\'' +
+                ", hobby='" + hobby + '\'' +
+                ", state=" + state +
+                ", address=" + address +
+                ", company='" + company + '\'' +
+                ", educationbackground=" + educationbackground +
+                ", sign=" + sign +
+                ", createtime=" + createtime +
+                '}';
     }
 }

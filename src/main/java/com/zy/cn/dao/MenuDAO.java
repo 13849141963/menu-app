@@ -1,17 +1,19 @@
 package com.zy.cn.dao;
 
-import com.zy.cn.entity.MenuEntity;
+import com.zy.cn.entity.Menu;
+import com.zy.cn.entity.vo.MenuVo;
 
-public interface MenuDAO extends BaseDAO<MenuEntity>{
+import java.util.List;
 
-
+public interface MenuDAO extends BaseDAO<Menu>{
     int deleteByPrimaryKey(Integer id);
 
-    int insertSelective(MenuEntity record);
+    int insertSelective(Menu record);
 
-    MenuEntity selectByPrimaryKey(Integer id);
+    Menu selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(MenuEntity record);
+    int updateByPrimaryKeySelective(Menu record);
 
-    int updateByPrimaryKey(MenuEntity record);
+    int updateByPrimaryKey(Menu record);
+
 }
